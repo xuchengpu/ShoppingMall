@@ -1,10 +1,12 @@
-package com.xuchengpu.shoppingmall;
+package com.xuchengpu.shoppingmall.app;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
+
+import com.xuchengpu.shoppingmall.R;
 
 public class WelcomeActivity extends AppCompatActivity {
     private Handler handler=new Handler();
