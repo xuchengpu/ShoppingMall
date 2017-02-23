@@ -1,5 +1,6 @@
 package com.xuchengpu.shoppingmall.home.fragment;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -8,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.base.BaseFragment;
+import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
+import com.xuchengpu.shoppingmall.home.bean.HomeBean;
 import com.xuchengpu.shoppingmall.utils.Constants;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -38,6 +42,7 @@ public class HomeFragment extends BaseFragment {
     RecyclerView rvHome;
     @BindView(R.id.ib_top)
     ImageButton ibTop;
+    private HomeAdapter adapter;
 
     /*
         初始化布局
@@ -63,7 +68,7 @@ public class HomeFragment extends BaseFragment {
         OkHttpUtils
                 .get()
                 .url(Constants.HOME_URL)
-                .id(100)
+                .id(100)//100:http 、101：https
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -81,7 +86,13 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void processData(String response) {
-//        HomeBean homeBean
+        HomeBean homeBean = JSON.parseObject(response,HomeBean.class);
+        Log.e("tag","fastjson解析成功="+homeBean.getResult().getAct_info().get(1).getName());
+
+        //设置RecyclerView的适配器
+        adapter = new HomeAdapter(mContext, homeBean.getResult());
+        rvHome.setAdapter(adapter);
+        rvHome.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
 
     }
 
