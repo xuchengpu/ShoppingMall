@@ -1,6 +1,7 @@
 package com.xuchengpu.shoppingmall.home.fragment;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -9,10 +10,14 @@ import android.widget.TextView;
 
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.base.BaseFragment;
+import com.xuchengpu.shoppingmall.utils.Constants;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Created by 许成谱 on 2017/2/22 15:10.
@@ -50,6 +55,33 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void initData() {
         super.initData();
+        getDataFromNet();
+
+    }
+
+    private void getDataFromNet() {
+        OkHttpUtils
+                .get()
+                .url(Constants.HOME_URL)
+                .id(100)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("tag","联网请求失败=="+e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("tag","联网请求成功=="+response);
+                        processData(response);
+                    }
+                });
+
+    }
+
+    private void processData(String response) {
+//        HomeBean homeBean
 
     }
 
