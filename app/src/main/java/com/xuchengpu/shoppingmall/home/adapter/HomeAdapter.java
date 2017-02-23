@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -86,8 +89,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             case BANNER:
                return new BannerHolder(mContext,inflater.inflate(R.layout.banner_viewpager,null));
             case CHANNEL:
-//                return new ChannelHolder(mContext,inflater.inflate(R.layout.banner_viewpager,null));
-                break;
+                return new ChannelHolder(mContext,inflater.inflate(R.layout.item_channel,null));
             case ACT:
                 break;
             case SECKILL:
@@ -109,11 +111,12 @@ public class HomeAdapter extends RecyclerView.Adapter {
         * */
         switch (getItemViewType(position)) {
             case BANNER:
-                BannerHolder viewHolder= (BannerHolder) holder;
-                viewHolder.setData(result.getBanner_info());
+                BannerHolder bannerViewHolder= (BannerHolder) holder;
+                bannerViewHolder.setData(result.getBanner_info());
                 break;
             case CHANNEL:
-
+                ChannelHolder channelViewHolder= (ChannelHolder) holder;
+                channelViewHolder.setData(result.getChannel_info());
                 break;
             case ACT:
                 break;
@@ -131,15 +134,41 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 1;
+        return 2;
     }
 
+    class ChannelHolder extends RecyclerView.ViewHolder{
+        private  Context context;
+        private GridView gv_channel;
+        private ListAdapter adapter;
+
+        public ChannelHolder(Context mContext, View itemView) {
+            super(itemView);
+            this.context=mContext;
+            gv_channel= (GridView) itemView.findViewById(R.id.gv_channel);
+        }
+
+        public void setData(List<HomeBean.ResultBean.ChannelInfoBean> channel_info) {
+            adapter=new GridAdapter(context,channel_info);
+            gv_channel.setAdapter(adapter);
+            gv_channel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(context, "position="+position, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+
     class BannerHolder extends RecyclerView.ViewHolder{
+        private final Context context;
         private Banner banner;
 
         public BannerHolder(Context mContext, View itemView) {
             super(itemView);
             banner= (Banner) itemView.findViewById(R.id.banner);
+            this.context=mContext;
         }
 
         public void setData(List<HomeBean.ResultBean.BannerInfoBean> banner_info) {
@@ -151,7 +180,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
                    .setImageLoader(new ImageLoader() {
                        @Override
                        public void displayImage(Context context, Object path, ImageView imageView) {
-                           Glide.with(mContext)
+                           Glide.with(context)
                                    .load(path)
                                    .crossFade()
                                    .into(imageView);
@@ -164,7 +193,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             banner.setOnBannerListener(new OnBannerListener() {
                 @Override
                 public void OnBannerClick(int position) {
-                    Toast.makeText(mContext, "position="+position, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "position="+position, Toast.LENGTH_SHORT).show();
                 }
             });
         }
