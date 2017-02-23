@@ -5,11 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.home.bean.HomeBean;
+import com.xuchengpu.shoppingmall.utils.Constants;
+import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.loader.ImageLoader;
+import com.youth.banner.transformer.BackgroundToForegroundTransformer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,7 +86,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             case BANNER:
                return new BannerHolder(mContext,inflater.inflate(R.layout.banner_viewpager,null));
             case CHANNEL:
-
+//                return new ChannelHolder(mContext,inflater.inflate(R.layout.banner_viewpager,null));
                 break;
             case ACT:
                 break;
@@ -127,15 +135,38 @@ public class HomeAdapter extends RecyclerView.Adapter {
     }
 
     class BannerHolder extends RecyclerView.ViewHolder{
-        TextView tv;
+        private Banner banner;
 
         public BannerHolder(Context mContext, View itemView) {
             super(itemView);
-            tv= (TextView) itemView.findViewById(R.id.tv_banner);
+            banner= (Banner) itemView.findViewById(R.id.banner);
         }
 
         public void setData(List<HomeBean.ResultBean.BannerInfoBean> banner_info) {
-            tv.setText("使用banner前测试");
+            List images=new ArrayList();
+            for(int i = 0; i < banner_info.size(); i++) {
+              images.add(Constants.BASE_URL_IMAGE+banner_info.get(i).getImage());
+            }
+           banner.setImages(images)
+                   .setImageLoader(new ImageLoader() {
+                       @Override
+                       public void displayImage(Context context, Object path, ImageView imageView) {
+                           Glide.with(mContext)
+                                   .load(path)
+                                   .crossFade()
+                                   .into(imageView);
+                       }
+                   })
+                   .start();
+            //设置样式
+            banner.setBannerAnimation(BackgroundToForegroundTransformer.class);
+            //设置Banner的点击事件
+            banner.setOnBannerListener(new OnBannerListener() {
+                @Override
+                public void OnBannerClick(int position) {
+                    Toast.makeText(mContext, "position="+position, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
