@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.home.bean.HomeBean;
+import com.xuchengpu.shoppingmall.home.view.MyGridView;
 import com.xuchengpu.shoppingmall.utils.Constants;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
@@ -50,7 +51,6 @@ public class HomeAdapter extends RecyclerView.Adapter {
     public static final int SECKILL = 3;
     public static final int RECOMMEND = 4;
     public static final int HOT = 5;
-
 
 
     private int currentType = BANNER;
@@ -105,9 +105,9 @@ public class HomeAdapter extends RecyclerView.Adapter {
             case SECKILL:
                 return new SeckillHolder(mContext, inflater.inflate(R.layout.item_seckill, null));
             case RECOMMEND:
-                break;
+                return new RecommendHolder(mContext, inflater.inflate(R.layout.item_recommend, null));
             case HOT:
-                break;
+                return new HotHolder(mContext, inflater.inflate(R.layout.item_hot, null));
             default:
                 break;
         }
@@ -137,8 +137,12 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 seckllViewHolder.setData(result.getSeckill_info());
                 break;
             case RECOMMEND:
+                RecommendHolder recommendViewHolder = (RecommendHolder) holder;
+                recommendViewHolder.setData(result.getRecommend_info());
                 break;
             case HOT:
+                HotHolder hotViewHolder = (HotHolder) holder;
+                hotViewHolder.setData(result.getHot_info());
                 break;
             default:
                 break;
@@ -148,7 +152,48 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 6;
+    }
+
+    class HotHolder extends RecyclerView.ViewHolder {
+        private final Context mContext;
+        @BindView(R.id.tv_more_hot)
+        TextView tvMoreHot;
+        @BindView(R.id.gv_hot)
+        MyGridView gvHot;
+        HotGridAdapter adapter;
+
+
+        public HotHolder(Context mContext, View itemView) {
+            super(itemView);
+            this.mContext = mContext;
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
+            adapter=new HotGridAdapter(mContext,hot_info);
+            gvHot.setAdapter(adapter);
+        }
+    }
+
+    class RecommendHolder extends RecyclerView.ViewHolder {
+        private final Context mContext;
+        @BindView(R.id.tv_more_recommend)
+        TextView tvMoreRecommend;
+        @BindView(R.id.gv_recommend)
+        GridView gvRecommend;
+        RecommendGridAdapter adapter;
+
+        public RecommendHolder(Context mContext, View itemView) {
+            super(itemView);
+            this.mContext = mContext;
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void setData(List<HomeBean.ResultBean.RecommendInfoBean> recommend_info) {
+            adapter = new RecommendGridAdapter(mContext, recommend_info);
+            gvRecommend.setAdapter(adapter);
+        }
     }
 
     class SeckillHolder extends RecyclerView.ViewHolder {
@@ -163,19 +208,19 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
         public SeckillHolder(Context mContext, View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
-            this.mContext=mContext;
+            ButterKnife.bind(this, itemView);
+            this.mContext = mContext;
         }
 
         public void setData(HomeBean.ResultBean.SeckillInfoBean seckill_info) {
             countdownview.setTag("test1");
-            long time1 = (long)5 * 60 * 60 * 1000;
+            long time1 = (long) 5 * 60 * 60 * 1000;
             countdownview.start(time1);
 
 
-            adapter=new SeckillRecycleViewAdapter(mContext,seckill_info);
+            adapter = new SeckillRecycleViewAdapter(mContext, seckill_info);
             rvSeckill.setAdapter(adapter);
-            rvSeckill.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false));
+            rvSeckill.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         }
     }
 
