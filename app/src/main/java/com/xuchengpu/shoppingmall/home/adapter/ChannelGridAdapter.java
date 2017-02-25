@@ -23,11 +23,11 @@ import butterknife.ButterKnife;
  * for:
  */
 
-public class GridAdapter extends BaseAdapter {
+public class ChannelGridAdapter extends BaseAdapter {
     private final Context mContext;
     private final List<HomeBean.ResultBean.ChannelInfoBean> result;
 
-    public GridAdapter(Context mContext, List<HomeBean.ResultBean.ChannelInfoBean> banner_info) {
+    public ChannelGridAdapter(Context mContext, List<HomeBean.ResultBean.ChannelInfoBean> banner_info) {
         this.mContext = mContext;
         this.result = banner_info;
     }
