@@ -59,11 +59,24 @@ public class SeckillRecycleViewAdapter extends RecyclerView.Adapter<SeckillRecyc
             ButterKnife.bind(this,itemView);
         }
 
-        public void setData(HomeBean.ResultBean.SeckillInfoBean seckill_info, int position) {
+        public void setData(HomeBean.ResultBean.SeckillInfoBean seckill_info, final int position) {
             tvCoverPrice.setText(seckill_info.getList().get(position).getCover_price());
             tvOriginPrice.setText(seckill_info.getList().get(position).getOrigin_price());
             Glide.with(mContext).load(Constants.BASE_URL_IMAGE+seckill_info.getList().get(position).getFigure()).into(ivFigure);
+            ivFigure.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onClick(v,position);
+                }
+            });
         }
+    }
+    public  interface OnItemClickListener{
+        void onClick(View v, int position);
+    }
+    private OnItemClickListener onItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener=onItemClickListener;
     }
 
 }

@@ -173,6 +173,12 @@ public class HomeAdapter extends RecyclerView.Adapter {
         public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
             adapter=new HotGridAdapter(mContext,hot_info);
             gvHot.setAdapter(adapter);
+            gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(mContext, "position="+position, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -193,6 +199,12 @@ public class HomeAdapter extends RecyclerView.Adapter {
         public void setData(List<HomeBean.ResultBean.RecommendInfoBean> recommend_info) {
             adapter = new RecommendGridAdapter(mContext, recommend_info);
             gvRecommend.setAdapter(adapter);
+            gvRecommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(mContext, "position="+position, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -221,6 +233,12 @@ public class HomeAdapter extends RecyclerView.Adapter {
             adapter = new SeckillRecycleViewAdapter(mContext, seckill_info);
             rvSeckill.setAdapter(adapter);
             rvSeckill.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+            adapter.setOnItemClickListener(new SeckillRecycleViewAdapter.OnItemClickListener() {
+                @Override
+                public void onClick(View v, int position) {
+                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
