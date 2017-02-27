@@ -177,13 +177,22 @@ public class HomeAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, itemView);
         }
 
-        public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
+        public void setData(final List<HomeBean.ResultBean.HotInfoBean> hot_info) {
             adapter = new HotGridAdapter(mContext, hot_info);
             gvHot.setAdapter(adapter);
             gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, "position=" + position, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "position=" + position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.HotInfoBean hot_infoBean = hot_info.get(position);
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setCover_price(hot_infoBean.getCover_price());
+                    goodsBean.setFigure(hot_infoBean.getFigure());
+                    goodsBean.setName(hot_infoBean.getName());
+                    goodsBean.setProduct_id(hot_infoBean.getProduct_id());
+                    Intent intent=new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODSBEAN,goodsBean);
+                    mContext.startActivity(intent);
                 }
             });
         }
@@ -242,7 +251,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             this.mContext = mContext;
         }
 
-        public void setData(HomeBean.ResultBean.SeckillInfoBean seckill_info) {
+        public void setData(final HomeBean.ResultBean.SeckillInfoBean seckill_info) {
             countdownview.setTag("test1");
             long time1 = (long) 5 * 60 * 60 * 1000;
             countdownview.start(time1);
@@ -254,7 +263,17 @@ public class HomeAdapter extends RecyclerView.Adapter {
             adapter.setOnItemClickListener(new SeckillRecycleViewAdapter.OnItemClickListener() {
                 @Override
                 public void onClick(View v, int position) {
-                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.SeckillInfoBean.ListBean seckill_infoBean = seckill_info.getList().get(position);
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setCover_price(seckill_infoBean.getCover_price());
+                    goodsBean.setFigure(seckill_infoBean.getFigure());
+                    goodsBean.setName(seckill_infoBean.getName());
+                    goodsBean.setProduct_id(seckill_infoBean.getProduct_id());
+                    Intent intent=new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODSBEAN,goodsBean);
+                    mContext.startActivity(intent);
+
                 }
             });
         }
