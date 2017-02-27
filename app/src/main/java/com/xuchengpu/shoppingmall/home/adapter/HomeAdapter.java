@@ -18,8 +18,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.app.GoodsInfoActivity;
+import com.xuchengpu.shoppingmall.app.WebViewActivity;
 import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
 import com.xuchengpu.shoppingmall.home.bean.HomeBean;
+import com.xuchengpu.shoppingmall.home.bean.WebViewBean;
 import com.xuchengpu.shoppingmall.home.view.MyGridView;
 import com.xuchengpu.shoppingmall.utils.Constants;
 import com.youth.banner.Banner;
@@ -42,6 +44,7 @@ import cn.iwgang.countdownview.CountdownView;
  */
 
 public class HomeAdapter extends RecyclerView.Adapter {
+    public static final String WEBVIEW_BEAN = "webview_bean";
     private final Context mContext;
     private final HomeBean.ResultBean result;
 
@@ -271,7 +274,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             actViewpager = (ViewPager) itemView.findViewById(R.id.act_viewpager);
         }
 
-        public void setData(List<HomeBean.ResultBean.ActInfoBean> act_info) {
+        public void setData(final List<HomeBean.ResultBean.ActInfoBean> act_info) {
             adapter = new ActViewPagerAdapter(mContext, act_info);
             actViewpager.setAdapter(adapter);
 
@@ -286,7 +289,14 @@ public class HomeAdapter extends RecyclerView.Adapter {
             adapter.setOnItemClickListener(new ActViewPagerAdapter.OnItemClickListener() {
                 @Override
                 public void onClick(View v, int position) {
-                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                    WebViewBean webViewBean=new WebViewBean();
+                    webViewBean.setName(act_info.get(position).getName());
+                    webViewBean.setIcon_url(act_info.get(position).getIcon_url());
+                    webViewBean.setUrl(act_info.get(position).getUrl());
+                    Intent intent=new Intent(mContext, WebViewActivity.class);
+                    intent.putExtra(WEBVIEW_BEAN,webViewBean);
+                    mContext.startActivity(intent);
                 }
             });
 
@@ -327,7 +337,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             this.context = mContext;
         }
 
-        public void setData(List<HomeBean.ResultBean.BannerInfoBean> banner_info) {
+        public void setData(final List<HomeBean.ResultBean.BannerInfoBean> banner_info) {
             List images = new ArrayList();
             for (int i = 0; i < banner_info.size(); i++) {
                 images.add(Constants.BASE_URL_IMAGE + banner_info.get(i).getImage());
@@ -349,7 +359,38 @@ public class HomeAdapter extends RecyclerView.Adapter {
             banner.setOnBannerListener(new OnBannerListener() {
                 @Override
                 public void OnBannerClick(int position) {
-                    Toast.makeText(context, "position=" + position, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "position=" + position, Toast.LENGTH_SHORT).show();
+                    int realPostion = position;
+                    if (realPostion < banner_info.size()) {
+                        String product_id = "";
+                        String name = "";
+                        String cover_price = "";
+                        String image = "";
+                        if (realPostion == 0) {
+                            product_id = "627";
+                            cover_price = "32.00";
+                            name = "剑三T恤批发";
+                        } else if (realPostion == 1) {
+                            product_id = "21";
+                            cover_price = "8.00";
+                            name = "同人原创】剑网3 剑侠情缘叁 Q版成男 口袋胸针";
+                        } else {
+                            product_id = "1341";
+                            cover_price = "50.00";
+                            name = "【蓝诺】《天下吾双》 剑网3同人本";
+                        }
+                        image=banner_info.get(position).getImage();
+
+                        GoodsBean goodsBean = new GoodsBean();
+                        goodsBean.setCover_price(cover_price);
+                        goodsBean.setFigure(image);
+                        goodsBean.setName(name);
+                        goodsBean.setProduct_id(product_id);
+                        Intent intent=new Intent(mContext, GoodsInfoActivity.class);
+                        intent.putExtra(GOODSBEAN,goodsBean);
+                        mContext.startActivity(intent);
+
+                    }
                 }
             });
         }
