@@ -1,6 +1,7 @@
 package com.xuchengpu.shoppingmall.home.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xuchengpu.shoppingmall.R;
+import com.xuchengpu.shoppingmall.app.GoodsInfoActivity;
+import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
 import com.xuchengpu.shoppingmall.home.bean.HomeBean;
 import com.xuchengpu.shoppingmall.home.view.MyGridView;
 import com.xuchengpu.shoppingmall.utils.Constants;
@@ -55,6 +58,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     private int currentType = BANNER;
     private final LayoutInflater inflater;
+    public static final String GOODSBEAN="goodsBean";
 
     public HomeAdapter(Context mContext, HomeBean.ResultBean result) {
         this.mContext = mContext;
@@ -171,12 +175,12 @@ public class HomeAdapter extends RecyclerView.Adapter {
         }
 
         public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
-            adapter=new HotGridAdapter(mContext,hot_info);
+            adapter = new HotGridAdapter(mContext, hot_info);
             gvHot.setAdapter(adapter);
             gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, "position="+position, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "position=" + position, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -196,13 +200,24 @@ public class HomeAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, itemView);
         }
 
-        public void setData(List<HomeBean.ResultBean.RecommendInfoBean> recommend_info) {
+        public void setData(final List<HomeBean.ResultBean.RecommendInfoBean> recommend_info) {
             adapter = new RecommendGridAdapter(mContext, recommend_info);
             gvRecommend.setAdapter(adapter);
             gvRecommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, "position="+position, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "position="+position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.RecommendInfoBean recommendInfoBean = recommend_info.get(position);
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setCover_price(recommendInfoBean.getCover_price());
+                    goodsBean.setFigure(recommendInfoBean.getFigure());
+                    goodsBean.setName(recommendInfoBean.getName());
+                    goodsBean.setProduct_id(recommendInfoBean.getProduct_id());
+                    Intent intent=new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODSBEAN,goodsBean);
+                    mContext.startActivity(intent);
+
+
                 }
             });
         }
