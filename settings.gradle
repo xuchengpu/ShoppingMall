@@ -1,1 +1,1 @@
-include ':app', ':app2', ':fragmentdemo', 'teacher'
+include ':app', ':app2', ':fragmentdemo', 'teacher', ':AddSubView'

@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
 import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
+import com.xuchengpu.shoppingmall.shoppingcart.utils.CartStorage;
 import com.xuchengpu.shoppingmall.utils.Constants;
 
 import butterknife.BindView;
@@ -176,7 +177,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 break;
             case R.id.btn_good_info_addcart:
                 Toast.makeText(this, "加入到购物车", Toast.LENGTH_SHORT).show();
-
+                CartStorage.getInstance(GoodsInfoActivity.this).addData(goodsBean);
 
                 break;
             case R.id.ll_goods_root:

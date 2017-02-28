@@ -1,6 +1,7 @@
 package com.xuchengpu.shoppingmall.shoppingcart.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.google.gson.Gson;
@@ -22,7 +23,7 @@ public class CartStorage {
     private static final String JSON_CART ="json_cart" ;
     private static CartStorage instance;
     private final Context mContext;
-    private SparseArray<GoodsBean> sparseArray;//相对于hasmap效率更高
+    private SparseArray<GoodsBean> sparseArray;//相对于hasmap效率更高 但不能直接与json转化 故需用list中转
 
     private CartStorage(Context context){
         this.mContext=context;
@@ -31,26 +32,32 @@ public class CartStorage {
         listToSparseArray();
 
     }
-
+    //list转化为sparry 提高效率
     private void listToSparseArray() {
         List<GoodsBean> list=getAllData();
         for(int i = 0; i < list.size(); i++) {
             sparseArray.put(Integer.parseInt(list.get(i).getProduct_id()),list.get(i));
         }
     }
-
+    //此方法仅为方便拓展
     private List<GoodsBean> getAllData() {
         return getLocalData();
     }
 
     private List<GoodsBean> getLocalData() {
+        List<GoodsBean> list=new ArrayList<>();
         String json=CacheUtils.getString(mContext,JSON_CART);
-        List<GoodsBean> list=new Gson().fromJson(json,new TypeToken<List<GoodsBean>>(){}.getType());
+        //将json数组转化为list集合
+        if(!TextUtils.isEmpty(json)) {
+            list=new Gson().fromJson(json,new TypeToken<List<GoodsBean>>(){}.getType());
+        }
+
         return list;
     }
 
     public static CartStorage getInstance(Context context){
         if(instance==null) {
+            //防止开启分线程时重复创建了实例
             synchronized (CartStorage.class){
                 if(instance==null) {
                     instance=new CartStorage(context);
@@ -79,6 +86,7 @@ public class CartStorage {
     //存储到本地
     private void saveInLocal() {
         List<GoodsBean> goodsBeans=sparseArrayToList();
+        // 将数组转化为String类型对象方便存储
         String goodsBeansJson=new Gson().toJson(goodsBeans);
         CacheUtils.setString(mContext,JSON_CART,goodsBeansJson);
     }
