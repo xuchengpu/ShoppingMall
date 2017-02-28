@@ -40,7 +40,7 @@ public class CartStorage {
         }
     }
     //此方法仅为方便拓展
-    private List<GoodsBean> getAllData() {
+    public List<GoodsBean> getAllData() {
         return getLocalData();
     }
 

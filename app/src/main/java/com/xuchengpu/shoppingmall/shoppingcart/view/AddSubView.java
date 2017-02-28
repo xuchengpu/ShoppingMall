@@ -66,8 +66,8 @@ public class AddSubView extends LinearLayout {
             public void onClick(View v) {
                 if(value>minValue) {
                     value--;
-                    setValue(value);
                 }
+                setValue(value);
                 /*
                 数字状态变化的监听
                 * */
@@ -80,8 +80,9 @@ public class AddSubView extends LinearLayout {
             public void onClick(View v) {
                 if(value<maxValue) {
                     value++;
-                    setValue(value);
+
                 }
+                setValue(value);
                 /*
                 数字状态变化的监听
                 * */
