@@ -1,9 +1,14 @@
 package com.xuchengpu.shoppingmall.app;
 
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -12,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +27,8 @@ import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
 import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
 import com.xuchengpu.shoppingmall.shoppingcart.utils.CartStorage;
+import com.xuchengpu.shoppingmall.shoppingcart.utils.VirtualkeyboardHeight;
+import com.xuchengpu.shoppingmall.shoppingcart.view.AddSubView;
 import com.xuchengpu.shoppingmall.utils.Constants;
 
 import butterknife.BindView;
@@ -176,8 +184,9 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 Toast.makeText(this, "跳转到购物车", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_good_info_addcart:
-                Toast.makeText(this, "加入到购物车", Toast.LENGTH_SHORT).show();
-                CartStorage.getInstance(GoodsInfoActivity.this).addData(goodsBean);
+//                Toast.makeText(this, "加入到购物车", Toast.LENGTH_SHORT).show();
+//                CartStorage.getInstance(GoodsInfoActivity.this).addData(goodsBean);
+                showPopwindow();
 
                 break;
             case R.id.ll_goods_root:
@@ -198,5 +207,70 @@ public class GoodsInfoActivity extends AppCompatActivity {
             case R.id.ll_root:
                 break;
         }
+    }
+
+    private void showPopwindow() {
+
+        //1、利用layoutInflater获得View
+
+        LayoutInflater inflater= (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view=inflater.inflate(R.layout.popupwindow_add_product,null);
+
+        //2、两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
+
+        final PopupWindow window=new PopupWindow(view, WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+
+        // 3、 参数设置
+        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
+        window.setFocusable(true);
+        // 实例化一个ColorDrawable颜色为半透明
+        ColorDrawable cw=new ColorDrawable(0xFFFFFFFF);
+        window.setBackgroundDrawable(cw);
+        // 设置popWindow的显示和消失动画
+        window.setAnimationStyle(R.style.mypopwindow_anim_style);
+        // 4 控件处理
+        ImageView iv_goodinfo_photo = (ImageView) view.findViewById(R.id.iv_goodinfo_photo);
+        TextView tv_goodinfo_name = (TextView) view.findViewById(R.id.tv_goodinfo_name);
+        TextView tv_goodinfo_price = (TextView) view.findViewById(R.id.tv_goodinfo_price);
+        AddSubView nas_goodinfo_num = (AddSubView) view.findViewById(R.id.nas_goodinfo_num);
+        Button bt_goodinfo_cancel = (Button) view.findViewById(R.id.bt_goodinfo_cancel);
+        Button bt_goodinfo_confim = (Button) view.findViewById(R.id.bt_goodinfo_confim);
+        // 加载图片
+        Glide.with(this).load(Constants.BASE_URL_IMAGE + goodsBean.getFigure()).into(iv_goodinfo_photo);
+        tv_goodinfo_name.setText(goodsBean.getName());
+        tv_goodinfo_price.setText(goodsBean.getCover_price());
+        nas_goodinfo_num.setMaxValue(100);
+        nas_goodinfo_num.setMinValue(1);
+        nas_goodinfo_num.setValue(1);
+        bt_goodinfo_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                window.dismiss();
+            }
+        });
+        nas_goodinfo_num.setOnNumberChangerListener(new AddSubView.OnNumberChangerListener() {
+            @Override
+            public void OnNumberChanger(int value) {
+                goodsBean.setNumber(value);
+            }
+        });
+        bt_goodinfo_confim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CartStorage.getInstance(GoodsInfoActivity.this).addData(goodsBean);
+                window.dismiss();
+            }
+        });
+        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                window.dismiss();
+            }
+        });
+
+        // 5 在底部显示
+        window.showAtLocation(GoodsInfoActivity.this.findViewById(R.id.ll_goods_root),
+                Gravity.BOTTOM, 0, VirtualkeyboardHeight.getBottomStatusHeight(GoodsInfoActivity.this));
+
     }
 }
