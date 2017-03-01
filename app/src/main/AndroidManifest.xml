@@ -6,7 +6,6 @@
 
     <!-- if you want to load images from a file OR from the internet -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -31,17 +30,17 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask" />
         <activity android:name=".app.GoodsInfoActivity" />
-        <activity android:name=".app.WebViewActivity"></activity>
+        <activity android:name=".app.WebViewActivity" />
         <!-- alipay sdk begin -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
 
         <!-- alipay sdk end -->
+        <activity android:name=".app.CallCenterActivity"></activity>
     </application>
 
 </manifest>

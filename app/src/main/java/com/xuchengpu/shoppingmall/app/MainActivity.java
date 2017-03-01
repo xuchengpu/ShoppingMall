@@ -1,8 +1,13 @@
 package com.xuchengpu.shoppingmall.app;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
@@ -13,6 +18,7 @@ import com.xuchengpu.shoppingmall.home.fragment.HomeFragment;
 import com.xuchengpu.shoppingmall.shoppingcart.fragment.ShoppingCartFragment;
 import com.xuchengpu.shoppingmall.type.fragment.TypeFragment;
 import com.xuchengpu.shoppingmall.user.fragment.UserFragment;
+import com.xuchengpu.shoppingmall.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +36,24 @@ public class MainActivity extends AppCompatActivity {
     private int position;
     private List<Fragment> fragments;
     private Fragment tempFragment;
+    private LocalBroadcastManager localBroadcastManager;
+    private BroadcastReceiver receiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            rgMain.check(R.id.rb_main_home);
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //注册广播
+        localBroadcastManager=LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.registerReceiver(receiver,new IntentFilter(Constants.GOTOHOME));
         //初始化数据，获得碎片集合
         initData();
         //设置监听
@@ -111,5 +129,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        localBroadcastManager.unregisterReceiver(receiver);
+    }
 }
 

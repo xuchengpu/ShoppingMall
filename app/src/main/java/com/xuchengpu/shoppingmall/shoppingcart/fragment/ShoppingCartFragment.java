@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -25,6 +27,7 @@ import com.xuchengpu.shoppingmall.shoppingcart.adapter.ShoppingCartAdapter;
 import com.xuchengpu.shoppingmall.shoppingcart.utils.CartStorage;
 import com.xuchengpu.shoppingmall.shoppingcart.utils.PayResult;
 import com.xuchengpu.shoppingmall.shoppingcart.utils.SignUtils;
+import com.xuchengpu.shoppingmall.utils.Constants;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -73,6 +76,7 @@ public class ShoppingCartFragment extends BaseFragment {
     @BindView(R.id.ll_empty_shopcart)
     LinearLayout llEmptyShopcart;
     private ShoppingCartAdapter adapter;
+    private LocalBroadcastManager manager;
 
     /*
         初始化布局
@@ -152,6 +156,7 @@ public class ShoppingCartFragment extends BaseFragment {
     @Override
     public void initData() {
         super.initData();
+        manager = LocalBroadcastManager.getInstance(mContext);
         showData();
 
     }
@@ -236,6 +241,10 @@ public class ShoppingCartFragment extends BaseFragment {
             case R.id.iv_empty:
                 break;
             case R.id.tv_empty_cart_tobuy:
+
+                Intent intent=new Intent(Constants.GOTOHOME);
+                manager.sendBroadcast(intent);
+
                 break;
             case R.id.ll_empty_shopcart:
                 break;

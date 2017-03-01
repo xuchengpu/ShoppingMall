@@ -7,6 +7,7 @@ package com.xuchengpu.shoppingmall.utils;
  */
 
 public class Constants {
+    public static final String GOTOHOME="gotohome";
     //    public static String BASE_URL = "http://192.168.51.104:8080/atguigu";
 //    public static String BASE_URL = "http://192.168.1.44:8080/atguigu";
 //    public static String BASE_URL = "http://localhost:8080/atguigu";
