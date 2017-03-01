@@ -1,8 +1,11 @@
 package com.xuchengpu.shoppingmall.app;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
@@ -15,9 +18,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
+import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
 import com.xuchengpu.shoppingmall.home.bean.WebViewBean;
+import com.xuchengpu.shoppingmall.shoppingcart.bean.H5Bean;
 import com.xuchengpu.shoppingmall.utils.Constants;
 
 import butterknife.BindView;
@@ -108,10 +114,30 @@ public class WebViewActivity extends AppCompatActivity {
         webview.loadUrl(Constants.BASE_URL_IMAGE+webViewBean.getUrl());
 
     }
+
     class MyJavascriptInterface{
         @JavascriptInterface
         public void jumpForAndroid(String s){
-            Toast.makeText(WebViewActivity.this, "s=="+s, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(WebViewActivity.this, "s=="+s, Toast.LENGTH_SHORT).show();
+            Log.e("TAG",s);
+            if(!TextUtils.isEmpty(s)) {
+                /**
+                 * option : 1
+                 * type : 1
+                 * value : {"product_id":9880}
+                 */
+                H5Bean h5Bean= JSON.parseObject(s,H5Bean.class);
+                GoodsBean goodsBean=new GoodsBean();
+                goodsBean.setProduct_id(h5Bean.getValue().getProduct_id()+"");
+                goodsBean.setName("北京晔城华科教育优先公司");
+                goodsBean.setFigure("/1478770583834.png");
+                goodsBean.setCover_price(18800+"");
+                Intent intent=new Intent(WebViewActivity.this,GoodsInfoActivity.class);
+                intent.putExtra(HomeAdapter.GOODSBEAN,goodsBean);
+                startActivity(intent);
+
+            }
+
         }
 
     }
