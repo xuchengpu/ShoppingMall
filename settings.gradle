@@ -1,1 +1,1 @@
-include ':app', ':app2', ':fragmentdemo', 'teacher', ':AddSubView'
+include ':app', ':app2', ':fragmentdemo', ':AddSubView', ':alipay_demo', 'teacher'
