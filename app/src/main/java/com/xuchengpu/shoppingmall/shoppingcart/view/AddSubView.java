@@ -90,6 +90,9 @@ public class AddSubView extends LinearLayout {
             }
 
         });
+        /*
+        * 自定义属性时需通过以下代码将读取到的属性值具体设置到布局视图中显示
+        * */
 
         if (attrs != null) {
             //取出属性
@@ -118,6 +121,9 @@ public class AddSubView extends LinearLayout {
         }
 
     }
+    /*
+    * 提供一个接口来将value值的变化传递给实现类
+    * */
     public interface OnNumberChangerListener{
         void OnNumberChanger(int value);
     }

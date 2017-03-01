@@ -65,6 +65,11 @@ public class ShoppingCartFragment extends BaseFragment {
         View view = View.inflate(mContext, R.layout.fragment_shopping_cart, null);
         ButterKnife.bind(this, view);
 
+
+        /*
+        * 处理右上角编辑与完成的textview按钮代码
+        * */
+
         //设置编辑状态
         tvShopcartEdit.setTag(ACTION_EDIT);
         tvShopcartEdit.setText("编辑");
@@ -88,7 +93,7 @@ public class ShoppingCartFragment extends BaseFragment {
         });
         return view;
     }
-
+    //隐藏底部删除购物车商品栏
     private void hideDelete() {
         //1.设置编辑
         tvShopcartEdit.setTag(ACTION_EDIT);
@@ -105,7 +110,7 @@ public class ShoppingCartFragment extends BaseFragment {
             adapter.showTotalPrice();
         }
     }
-
+    //显示底部删除购物车商品栏
     private void showDelete() {
         //1.设置完成
         tvShopcartEdit.setTag(ACTION_COMPLETE);
@@ -134,6 +139,8 @@ public class ShoppingCartFragment extends BaseFragment {
 
     }
 
+    //保证每次切换回来时购物车栏都是显示最新的状态
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -142,6 +149,7 @@ public class ShoppingCartFragment extends BaseFragment {
         }
     }
 
+    //得到数据，并设置适配器，将数据加载到recycleview中显示
     private void showData() {
         List<GoodsBean> goodsBeens = CartStorage.getInstance(mContext).getAllData();
         //有数据，影藏空界面
@@ -174,11 +182,14 @@ public class ShoppingCartFragment extends BaseFragment {
                 break;
             case R.id.recyclerview:
                 break;
+            //全选按钮
             case R.id.checkbox_all:
+                //得到全选的CheckBox按钮状态
                 boolean ischecked=checkboxAll.isChecked();
+                //调用adapter中的方法具体操作每个item数据
                 adapter.checkAll_none(ischecked);
+                //刷新价格
                 adapter.showTotalPrice();
-//                adapter.notifyDataSetChanged();
                 break;
             case R.id.tv_shopcart_total:
                 break;
@@ -186,14 +197,18 @@ public class ShoppingCartFragment extends BaseFragment {
                 break;
             case R.id.ll_check_all:
                 break;
+            //删除状态下的全选按钮
             case R.id.checkbox_delete_all:
                ischecked=checkboxDeleteAll.isChecked();
                 adapter.checkAll_none(ischecked);
                 adapter.showTotalPrice();
                 break;
             case R.id.btn_delete:
+                //调用adapter中的方法具体操作
                 adapter.deleteData();
+                //检查状态 设置全选按钮的状态
                 adapter.checkAll();
+                //检查是否为空数据，来决定显示的界面
                 showEempty();
                 break;
             case R.id.btn_collection:
@@ -209,7 +224,7 @@ public class ShoppingCartFragment extends BaseFragment {
                 break;
         }
     }
-
+    //检查是否为空数据，来决定显示的界面
     private void showEempty() {
         if(adapter.getItemCount() == 0){
             llEmptyShopcart.setVisibility(View.VISIBLE);
