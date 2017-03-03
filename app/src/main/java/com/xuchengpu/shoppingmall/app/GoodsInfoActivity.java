@@ -2,6 +2,7 @@ package com.xuchengpu.shoppingmall.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -231,6 +232,9 @@ public class GoodsInfoActivity extends AppCompatActivity {
         window.setBackgroundDrawable(cw);
         // 设置popWindow的显示和消失动画
         window.setAnimationStyle(R.style.mypopwindow_anim_style);
+        //设置点击外部区域是否会消失
+        window.setBackgroundDrawable(new BitmapDrawable());
+        window.setOutsideTouchable(true);
         // 4 控件处理
         ImageView iv_goodinfo_photo = (ImageView) view.findViewById(R.id.iv_goodinfo_photo);
         TextView tv_goodinfo_name = (TextView) view.findViewById(R.id.tv_goodinfo_name);
@@ -272,6 +276,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
         });
 
         // 5 在底部显示
+        //在虚拟键盘上边
         window.showAtLocation(GoodsInfoActivity.this.findViewById(R.id.ll_goods_root),
                 Gravity.BOTTOM, 0, VirtualkeyboardHeight.getBottomStatusHeight(GoodsInfoActivity.this));
 

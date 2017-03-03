@@ -1,11 +1,21 @@
 package com.xuchengpu.shoppingmall.type.fragment;
 
-import android.graphics.Color;
-import android.view.Gravity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
+import com.flyco.tablayout.SegmentTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.base.BaseFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by 许成谱 on 2017/2/22 15:10.
@@ -14,17 +24,24 @@ import com.xuchengpu.shoppingmall.base.BaseFragment;
  */
 
 public class TypeFragment extends BaseFragment {
-    private TextView textView;
+    @BindView(R.id.tl_1)
+    SegmentTabLayout tl1;
+    @BindView(R.id.iv_type_search)
+    ImageView ivTypeSearch;
+    @BindView(R.id.fl_type)
+    FrameLayout flType;
+    private String[] titles = {"分类", "标签"};
+    private List<Fragment> fragments;
+    private Fragment tempFragment;
+
     /*
-    初始化布局
-    * */
+        初始化布局
+        * */
     @Override
     public View initView() {
-        textView=new TextView(mContext);
-        textView.setTextColor(Color.RED);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(30);
-        return textView;
+        View view = View.inflate(mContext, R.layout.fragment_type, null);
+        ButterKnife.bind(this, view);
+        return view;
     }
     /*
     * 布局加载完后加载数据
@@ -33,6 +50,58 @@ public class TypeFragment extends BaseFragment {
     @Override
     public void initData() {
         super.initData();
-        textView.setText("分类");
+        initListener();
+        initFragment();
+        switchFragment(fragments.get(0));
     }
+
+    private void switchFragment(Fragment currentFragment) {
+
+        //当前页面与缓存页面不同
+        if (tempFragment != currentFragment) {
+            //得到事务
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            //缓存页面不为空时
+            if (tempFragment != null) {
+                //当前页面没有被添加
+                if (!currentFragment.isAdded()) {
+                    transaction.add(R.id.fl_type, currentFragment);
+                    transaction.hide(tempFragment);
+                    //当前页面已经被添加
+                } else {
+                    transaction.hide(tempFragment);
+                }
+                // 缓存页面为空时
+            } else {
+                transaction.add(R.id.fl_type, currentFragment);
+            }
+            transaction.show(currentFragment);
+            transaction.commit();
+            tempFragment = currentFragment;
+        }
+    }
+
+    private void initFragment() {
+        fragments = new ArrayList<>();
+        fragments.add(new ListFragment());
+        fragments.add(new TagFragment());
+
+    }
+
+    private void initListener() {
+        tl1.setTabData(titles);
+        tl1.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelect(int position) {
+                switchFragment(fragments.get(position));
+            }
+
+            @Override
+            public void onTabReselect(int position) {
+
+            }
+        });
+    }
+
+
 }

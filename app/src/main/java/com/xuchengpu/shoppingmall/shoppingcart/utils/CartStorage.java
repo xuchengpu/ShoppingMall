@@ -30,7 +30,17 @@ public class CartStorage {
         sparseArray=new SparseArray<>();
         //从本地获取数据 初始化sparseArray
         listToSparseArray();
-
+    }
+    public static CartStorage getInstance(Context context){
+        if(instance==null) {
+            //防止开启分线程时重复创建了实例
+            synchronized (CartStorage.class){
+                if(instance==null) {
+                    instance=new CartStorage(context);
+                }
+            }
+        }
+        return instance;
     }
     //list转化为sparry 提高效率
     private void listToSparseArray() {
@@ -55,17 +65,7 @@ public class CartStorage {
         return list;
     }
 
-    public static CartStorage getInstance(Context context){
-        if(instance==null) {
-            //防止开启分线程时重复创建了实例
-            synchronized (CartStorage.class){
-                if(instance==null) {
-                    instance=new CartStorage(context);
-                }
-            }
-        }
-        return instance;
-    }
+
     public void addData(GoodsBean goodsBean){
         //1.数据添加到sparseArray
         GoodsBean tempGoodsBean= sparseArray.get(Integer.parseInt(goodsBean.getProduct_id()));
