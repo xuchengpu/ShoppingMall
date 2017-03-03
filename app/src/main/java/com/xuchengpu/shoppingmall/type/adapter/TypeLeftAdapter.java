@@ -71,6 +71,7 @@ public class TypeLeftAdapter extends BaseAdapter {
             public void onClick(View v) {
                 prePosition=position;
                 notifyDataSetChanged();
+                listFragment.getDataFormNet(listFragment.urls[position]);
 
             }
         });

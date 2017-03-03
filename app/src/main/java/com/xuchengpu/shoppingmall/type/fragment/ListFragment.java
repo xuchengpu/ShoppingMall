@@ -63,7 +63,7 @@ public class ListFragment extends BaseFragment {
         getDataFormNet(urls[0]);
     }
 
-    private void getDataFormNet(String url) {
+    public void getDataFormNet(String url) {
         OkHttpUtils.get()
                 .url(url)
                 .build()
