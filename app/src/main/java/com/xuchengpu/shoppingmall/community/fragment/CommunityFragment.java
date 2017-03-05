@@ -1,11 +1,20 @@
 package com.xuchengpu.shoppingmall.community.fragment;
 
-import android.graphics.Color;
-import android.view.Gravity;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
+import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.base.BaseFragment;
+import com.xuchengpu.shoppingmall.community.adapter.CommunityPagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by 许成谱 on 2017/2/22 15:10.
@@ -14,17 +23,27 @@ import com.xuchengpu.shoppingmall.base.BaseFragment;
  */
 
 public class CommunityFragment extends BaseFragment {
-    private TextView textView;
+    @BindView(R.id.ib_community_icon)
+    ImageButton ibCommunityIcon;
+    @BindView(R.id.ib_community_message)
+    ImageButton ibCommunityMessage;
+    @BindView(R.id.tablayout)
+    TabLayout tablayout;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+
+    private List<Fragment> fragments;
+    private CommunityPagerAdapter adapter;
+
+
     /*
-    初始化布局
-    * */
+        初始化布局
+        * */
     @Override
     public View initView() {
-        textView=new TextView(mContext);
-        textView.setTextColor(Color.RED);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(30);
-        return textView;
+        View view = View.inflate(mContext, R.layout.community_fragment, null);
+        ButterKnife.bind(this, view);
+        return view;
     }
     /*
     * 布局加载完后加载数据
@@ -33,6 +52,27 @@ public class CommunityFragment extends BaseFragment {
     @Override
     public void initData() {
         super.initData();
-        textView.setText("发现");
+        initFragments();
+        setAdapter();
+        tablayout.setupWithViewPager(viewPager);
+        tablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
     }
+
+    private void setAdapter() {
+
+        if(fragments!=null&&fragments.size()>0) {
+            adapter=new CommunityPagerAdapter(getFragmentManager(),fragments);
+            viewPager.setAdapter(adapter);
+        }
+    }
+
+
+    private void initFragments() {
+        fragments=new ArrayList<>();
+        fragments.add(new NewPostFragment());
+        fragments.add(new HotPostFragment());
+    }
+
+
 }
