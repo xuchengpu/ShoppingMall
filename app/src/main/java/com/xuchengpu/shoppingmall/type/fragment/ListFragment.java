@@ -96,7 +96,7 @@ public class ListFragment extends BaseFragment {
     private void setRightAdapter(TypeBean.ResultBean resultBean) {
         TypeRightAdapter adapter =new TypeRightAdapter(mContext,resultBean);
         rvRight.setAdapter(adapter);
-
+        // 用Grid布局管理器  设置第一行 三格为一体，其它一格为一体  实现布局的分类
         GridLayoutManager manager=new GridLayoutManager(mContext,3);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override

@@ -12,6 +12,8 @@ import java.util.List;
  * for:
  */
 
+//也可以用pageradapter  API一提供了封装好的 FragmentPagerAdapter，使用更方便
+
 public class CommunityPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> fragments;
@@ -31,7 +33,7 @@ public class CommunityPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return fragments.size();
     }
-
+    //返回标题给指示器
     @Override
     public CharSequence getPageTitle(int position) {
         return titles[position];

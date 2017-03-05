@@ -24,7 +24,7 @@ public class TypeLeftAdapter extends BaseAdapter {
     private final Context mContext;
     private final ListFragment listFragment;
     private int prePosition=0;
-
+    //注意对象也可以传进来
     public TypeLeftAdapter(String[] titles, Context mContext, ListFragment listFragment) {
         this.datas = titles;
         this.mContext = mContext;
@@ -61,8 +61,10 @@ public class TypeLeftAdapter extends BaseAdapter {
 
         convertView.setBackgroundResource(R.drawable.bg2);  //其他项背景
         viewHolder.tvTitle.setTextColor(Color.parseColor("#323437"));
+        //设置点击改变选中item颜色  用preposition记录位置  也可用一个接口回调的形式在listfragment中操作
         if(prePosition==position) {
             convertView.setBackgroundResource(R.drawable.type_item_background_selector);
+            //将数字直接转化为颜色
             viewHolder.tvTitle.setTextColor(Color.parseColor("#fd3f3f"));
         }
 
@@ -71,6 +73,7 @@ public class TypeLeftAdapter extends BaseAdapter {
             public void onClick(View v) {
                 prePosition=position;
                 notifyDataSetChanged();
+                //点击哪条item 就对哪条item请求数据
                 listFragment.getDataFormNet(listFragment.urls[position]);
 
             }

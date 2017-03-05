@@ -89,7 +89,9 @@ public class TypeFragment extends BaseFragment {
     }
 
     private void initListener() {
+        //给flycoTablayout传递标题数据
         tl1.setTabData(titles);
+        //给flycoTablayout设置改变的监听 以切换页面
         tl1.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {

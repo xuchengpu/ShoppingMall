@@ -77,7 +77,7 @@ public class NewPostAdapter extends BaseAdapter {
         viewHolder.tvCommunityLikes.setText(entity.getLikes());
         viewHolder.tvCommunityComments.setText(entity.getComments());
 
-        //显示弹幕
+        //显示弹幕  具体操作可参考demo
         List<String> strings = entity.getComment_list();
         if (strings != null && strings.size() > 0) {
             //有弹幕数据

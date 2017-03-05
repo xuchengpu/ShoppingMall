@@ -77,7 +77,7 @@ public class HotPostAdapter extends BaseAdapter {
 
         //设置置顶
         String is_top = entity.getIs_top();
-        //先移除
+        //先移除,防止重复添加
         viewHolder.llHotPost.removeAllViews();
         if ("1".equals(is_top)) {
             //显示置顶

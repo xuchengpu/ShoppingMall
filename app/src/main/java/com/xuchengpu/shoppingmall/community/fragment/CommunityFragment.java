@@ -54,13 +54,16 @@ public class CommunityFragment extends BaseFragment {
         super.initData();
         initFragments();
         setAdapter();
+        //设置指示器参数
+        //关联viewpager
         tablayout.setupWithViewPager(viewPager);
+        //滚动模式
         tablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
     }
 
     private void setAdapter() {
-
+        //设置适配器
         if(fragments!=null&&fragments.size()>0) {
             adapter=new CommunityPagerAdapter(getFragmentManager(),fragments);
             viewPager.setAdapter(adapter);
@@ -70,6 +73,7 @@ public class CommunityFragment extends BaseFragment {
 
     private void initFragments() {
         fragments=new ArrayList<>();
+        //先添加的位置为零，在前边
         fragments.add(new NewPostFragment());
         fragments.add(new HotPostFragment());
     }

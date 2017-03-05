@@ -58,6 +58,7 @@ public class TypeTagAdapter extends BaseAdapter {
             viewHolder= (ViewHolder) convertView.getTag();
         }
         viewHolder.tvTag.setText(data.get(position).getName());
+        //设置颜色随机
         viewHolder.tvTag.setTextColor(colors[position%colors.length]);
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

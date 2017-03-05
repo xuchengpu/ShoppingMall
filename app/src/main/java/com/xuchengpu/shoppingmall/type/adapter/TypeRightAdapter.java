@@ -48,7 +48,7 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
         hot_product_list = resultBean.getHot_product_list();
         inflater = LayoutInflater.from(mContext);
     }
-
+    //实现分类显示
     private static final int CHILD = 1;
     private static final int HOT = 0;
 
@@ -59,6 +59,7 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
 
     private int currenttype;
 
+    //人为指定类型
     @Override
     public int getItemViewType(int position) {
         if (position == HOT) {
@@ -134,6 +135,7 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
         public void setData() {
             for (int i = 0; i < hot_product_list.size(); i++) {
                 Log.e("tag", "i==" + i);
+                //用代码书写布局
                 LinearLayout linearLayout = new LinearLayout(mContext);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2, -2);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -152,8 +154,9 @@ public class TypeRightAdapter extends RecyclerView.Adapter {
                 textview.setGravity(Gravity.CENTER);
                 textview.setTextColor(Color.parseColor("#ed3f3f"));
                 textview.setText("￥" + hot_product_list.get(i).getCover_price());
+                //将位置参数添加进对应的控件
                 textview.setLayoutParams(tvParams);
-
+                //将控件添加进容器里面
                 linearLayout.addView(imageView);
                 linearLayout.addView(textview);
 

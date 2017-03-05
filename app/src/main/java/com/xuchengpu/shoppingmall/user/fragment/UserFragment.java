@@ -88,18 +88,22 @@ public class UserFragment extends BaseFragment implements GradationScrollView.Sc
     @Override
     public void initData() {
         super.initData();
+        //得到视图树观察者
         ViewTreeObserver observer = rlHeader.getViewTreeObserver();
+        //添加布局监听  此处直接测量的话heiht会为0 。得等到onresume方法回调后才能真正得到高度
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                //移除视图树的监听
+                //移除视图树的监听 避免消耗资源
                 rlHeader.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-
+                //得到某一控件高度
                 height=rlHeader.getHeight();
 
             }
         });
+        //设置接口回调，将实现类传递给接口方法的调用者即GradationScrollView中的onScrollChanged方法
         scrollview.setScrollViewListener(UserFragment.this);
+        //设置初始默认值
         tvUsercenter.setBackgroundColor(Color.argb(0,255,0,0));
     }
 
@@ -119,6 +123,7 @@ public class UserFragment extends BaseFragment implements GradationScrollView.Sc
             //滑动的距离：height=实时透明度：透明度最大值
             //实时透明度=透明度最大值*滑动的距离/height
             int alpa=255*y/height;
+            //透明度、红、蓝、绿
             tvUsercenter.setTextColor(Color.argb(alpa, 255, 255, 255));
             tvUsercenter.setBackgroundColor(Color.argb(alpa,255,0,0));
         }else{
