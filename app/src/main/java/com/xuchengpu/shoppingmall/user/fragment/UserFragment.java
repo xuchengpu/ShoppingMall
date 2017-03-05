@@ -1,5 +1,6 @@
 package com.xuchengpu.shoppingmall.user.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.hankkin.gradationscroll.GradationScrollView;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.base.BaseFragment;
+import com.xuchengpu.shoppingmall.user.view.LoginActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,17 +97,17 @@ public class UserFragment extends BaseFragment implements GradationScrollView.Sc
 
                 height=rlHeader.getHeight();
 
-                scrollview.setScrollViewListener(UserFragment.this);
-
             }
         });
+        scrollview.setScrollViewListener(UserFragment.this);
         tvUsercenter.setBackgroundColor(Color.argb(0,255,0,0));
     }
 
 
     @OnClick(R.id.tv_username)
     public void onClick() {
-
+        Intent intent=new Intent(mContext, LoginActivity.class);
+        mContext.startActivity(intent);
     }
 
     @Override
