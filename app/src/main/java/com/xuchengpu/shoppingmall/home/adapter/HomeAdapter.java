@@ -13,12 +13,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.app.GoodsInfoActivity;
 import com.xuchengpu.shoppingmall.app.WebViewActivity;
+import com.xuchengpu.shoppingmall.home.activity.GoodsListActivity;
 import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
 import com.xuchengpu.shoppingmall.home.bean.HomeBean;
 import com.xuchengpu.shoppingmall.home.bean.WebViewBean;
@@ -339,7 +339,10 @@ public class HomeAdapter extends RecyclerView.Adapter {
             gv_channel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(context, "position=" + position, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "position=" + position, Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(mContext, GoodsListActivity.class);
+                    intent.putExtra("position",position);
+                    mContext.startActivity(intent);
                 }
             });
         }
