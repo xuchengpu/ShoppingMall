@@ -77,6 +77,7 @@ public class TypeFragment extends BaseFragment {
             }
             transaction.show(currentFragment);
             transaction.commit();
+//            transaction.commitAllowingStateLoss();
             tempFragment = currentFragment;
         }
     }

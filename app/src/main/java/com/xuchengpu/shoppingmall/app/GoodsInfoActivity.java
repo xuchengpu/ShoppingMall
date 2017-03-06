@@ -186,6 +186,9 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 break;
             case R.id.tv_good_info_cart:
                 Toast.makeText(this, "跳转到购物车", Toast.LENGTH_SHORT).show();
+                Intent intentToCart=new Intent(this,MainActivity.class);
+                intentToCart.putExtra("gotocart", R.id.rb_main_shoppingcart);
+                startActivity(intentToCart);
                 break;
             case R.id.btn_good_info_addcart:
 //                Toast.makeText(this, "加入到购物车", Toast.LENGTH_SHORT).show();

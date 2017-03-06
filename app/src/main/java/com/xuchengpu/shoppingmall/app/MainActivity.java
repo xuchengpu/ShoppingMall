@@ -40,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver receiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
             rgMain.check(R.id.rb_main_home);
+
         }
     };
 
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
             }
             transaction.show(currentFragment);
             transaction.commit();
+//            transaction.commitAllowingStateLoss();
             tempFragment = currentFragment;
         }
     }
@@ -134,5 +137,14 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         localBroadcastManager.unregisterReceiver(receiver);
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+        int  gotocart = intent.getIntExtra("gotocart",R.id.rb_main_home);
+        rgMain.check(gotocart);
+    }
+
+
 }
 

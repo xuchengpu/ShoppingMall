@@ -206,12 +206,16 @@ public class GoodsListActivity extends AppCompatActivity {
     };
     private int click_count;
     private ExpandableListViewAdapter adapter;
+//    private LocalBroadcastManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_list);
         ButterKnife.bind(this);
+        //初始化广播
+//        manager = LocalBroadcastManager.getInstance(this);
+
         //获取从频道传过来的点击位置
         int position = getIntent().getIntExtra("position", 0);
         //请求网络
@@ -322,7 +326,7 @@ public class GoodsListActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("tag", "联网请求成功==" + response);
+                        Log.e("tag", "联网请求成功==" );
                         processData(response);
                     }
                 });
@@ -371,7 +375,10 @@ public class GoodsListActivity extends AppCompatActivity {
                 Toast.makeText(this, "搜索", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.ib_goods_list_home:
-                Toast.makeText(this, "主页面", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "主页面", Toast.LENGTH_SHORT).show();
+//                Intent intent=new Intent(Constants.GOTOHOME);
+//                manager.sendBroadcast(intent);
+                finish();
                 break;
             case R.id.tv_goods_list_sort:
                 click_count = 0;
