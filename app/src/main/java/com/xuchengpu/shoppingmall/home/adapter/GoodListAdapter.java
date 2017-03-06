@@ -66,6 +66,30 @@ public class GoodListAdapter extends RecyclerView.Adapter<GoodListAdapter.MyView
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(datas.get(getLayoutPosition()));
+                }
+            });
         }
+
+    }
+
+    /**
+     * 点击item的接口
+     */
+    public interface OnItemClickListener{
+        public void onItemClick(GoodListBean.ResultBean.PageDataBean  data);
+    }
+
+    private OnItemClickListener listener;
+
+    /**
+     * 设置item的点击事件
+     * @param listener
+     */
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

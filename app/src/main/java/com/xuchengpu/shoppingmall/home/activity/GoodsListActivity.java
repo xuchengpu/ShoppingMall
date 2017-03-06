@@ -1,5 +1,6 @@
 package com.xuchengpu.shoppingmall.home.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +22,11 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.xuchengpu.shoppingmall.R;
+import com.xuchengpu.shoppingmall.app.GoodsInfoActivity;
 import com.xuchengpu.shoppingmall.home.adapter.GoodListAdapter;
+import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
 import com.xuchengpu.shoppingmall.home.bean.GoodListBean;
+import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
 import com.xuchengpu.shoppingmall.home.view.SpaceItemDecoration;
 import com.xuchengpu.shoppingmall.utils.Constants;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -242,6 +246,21 @@ public class GoodsListActivity extends AppCompatActivity {
 
         recyclerview.setLayoutManager(new GridLayoutManager(this,2));
         recyclerview.addItemDecoration(new SpaceItemDecoration(10));
+
+        adapter.setOnItemClickListener(new GoodListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(GoodListBean.ResultBean.PageDataBean data) {
+                GoodsBean goodsBean = new GoodsBean();
+                goodsBean.setProduct_id(data.getProduct_id());
+                goodsBean.setName(data.getName());
+                goodsBean.setCover_price(data.getCover_price());
+                goodsBean.setFigure(data.getFigure());
+
+                Intent intent = new Intent(GoodsListActivity.this, GoodsInfoActivity.class);
+                intent.putExtra(HomeAdapter.GOODSBEAN, goodsBean);
+                startActivity(intent);
+            }
+        });
     }
 
     @OnClick({R.id.ib_goods_list_back, R.id.tv_goods_list_search, R.id.ib_goods_list_home, R.id.tv_goods_list_sort, R.id.tv_goods_list_price, R.id.tv_goods_list_select,R.id.ib_drawer_layout_back, R.id.ib_drawer_layout_confirm, R.id.rl_select_price, R.id.rl_select_recommend_theme, R.id.rl_select_type, R.id.btn_drawer_layout_cancel, R.id.btn_drawer_layout_confirm, R.id.btn_drawer_theme_cancel, R.id.btn_drawer_theme_confirm, R.id.btn_drawer_type_cancel, R.id.btn_drawer_type_confirm})
