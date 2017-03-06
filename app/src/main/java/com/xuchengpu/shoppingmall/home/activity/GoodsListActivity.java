@@ -1,12 +1,14 @@
 package com.xuchengpu.shoppingmall.home.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -198,6 +200,7 @@ public class GoodsListActivity extends AppCompatActivity {
             Constants.FOOD_STORE,
             Constants.SHOUSHI_STORE,
     };
+    private int click_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +211,51 @@ public class GoodsListActivity extends AppCompatActivity {
         int position = getIntent().getIntExtra("position", 0);
         //请求网络
         getDataFormNet(urls[position]);
+        initView();
 
+    }
+    private void initView() {
+        //设置综合排序高亮显示
+        tvGoodsListSort.setTextColor(Color.parseColor("#ed4141"));
+
+        //价格设置默认
+        tvGoodsListPrice.setTextColor(Color.parseColor("#333538"));
+
+        //筛选设置默认
+        tvGoodsListSelect.setTextColor(Color.parseColor("#333538"));
+
+
+        showSelectorLayout();//默认显示筛选页面
+    }
+
+    //筛选页面
+    private void showSelectorLayout() {
+        llPriceRoot.setVisibility(View.GONE);
+        llThemeRoot.setVisibility(View.GONE);
+        llTypeRoot.setVisibility(View.GONE);
+    }
+    //价格页面
+    private void showPriceLayout() {
+        llSelectRoot.setVisibility(View.GONE);
+        llThemeRoot.setVisibility(View.GONE);
+        llTypeRoot.setVisibility(View.GONE);
+    }
+
+    //主题页面
+    private void showThemeLayout() {
+        llSelectRoot.setVisibility(View.GONE);
+        llPriceRoot.setVisibility(View.GONE);
+        llTypeRoot.setVisibility(View.GONE);
+    }
+
+    //类别页面
+    private void showTypeLayout() {
+        llSelectRoot.setVisibility(View.GONE);
+        llPriceRoot.setVisibility(View.GONE);
+        llThemeRoot.setVisibility(View.GONE);
+
+        //初始化ExpandableListView
+//        initExpandableListView();
     }
 
     public void getDataFormNet(String url) {
@@ -276,41 +323,92 @@ public class GoodsListActivity extends AppCompatActivity {
                 Toast.makeText(this, "主页面", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_goods_list_sort:
+                click_count = 0;
+                ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_normal);
 
+                //设置综合排序高亮显示
+                tvGoodsListSort.setTextColor(Color.parseColor("#ed4141"));
+
+                //价格设置默认
+                tvGoodsListPrice.setTextColor(Color.parseColor("#333538"));
+
+                //筛选设置默认
+                tvGoodsListSelect.setTextColor(Color.parseColor("#333538"));
 
                 break;
             case R.id.tv_goods_list_price:
+                //设置价格高亮
+                tvGoodsListPrice.setTextColor(Color.parseColor("#ed4141"));
+                //综合设置默认
+                tvGoodsListSort.setTextColor(Color.parseColor("#333538"));
+                //筛选设置默认
+                tvGoodsListSelect.setTextColor(Color.parseColor("#333538"));
+
+
+                click_count++;
+
+                if (click_count % 2 == 1) {
+                    // 箭头向下红
+                    ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_desc);
+                } else {
+                    // 箭头向上红
+                    ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_asc);
+                }
 //
                 break;
             case R.id.tv_goods_list_select:
 //                Toast.makeText(this, "筛选", Toast.LENGTH_SHORT).show();
+                click_count = 0;
+                ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_normal);
+
+                //筛选设置高亮
+                tvGoodsListSelect.setTextColor(Color.parseColor("#ed4141"));
+                //综合设置默认
+                tvGoodsListSort.setTextColor(Color.parseColor("#333538"));
+                //价格设置默认
+                tvGoodsListPrice.setTextColor(Color.parseColor("#333538"));
+
+                //打开DrawLayout侧滑菜单
+                dlLeft.openDrawer(Gravity.RIGHT);
 
                 break;
 
             case R.id.ib_drawer_layout_back:
                 //关闭DrawLayout
+                dlLeft.closeDrawer(Gravity.RIGHT);
                 break;
             case R.id.ib_drawer_layout_confirm:
                 Toast.makeText(this, "筛选-确定", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.rl_select_price://显示-价格
-
+                llPriceRoot.setVisibility(View.VISIBLE);
+                showPriceLayout();
                 break;
             case R.id.rl_select_recommend_theme://主题
+                llThemeRoot.setVisibility(View.VISIBLE);
+                showThemeLayout();
                 break;
             case R.id.rl_select_type://类别
+                llTypeRoot.setVisibility(View.VISIBLE);
+                showTypeLayout();
                 break;
             case R.id.btn_drawer_layout_cancel:
+                llSelectRoot.setVisibility(View.VISIBLE);
+                showSelectorLayout();
                 break;
             case R.id.btn_drawer_layout_confirm:
                 Toast.makeText(this, "价格-确定", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_drawer_theme_cancel:
+                llSelectRoot.setVisibility(View.VISIBLE);
+                showSelectorLayout();
                 break;
             case R.id.btn_drawer_theme_confirm:
                 Toast.makeText(this, "主题-确定", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_drawer_type_cancel:
+                llSelectRoot.setVisibility(View.VISIBLE);
+                showSelectorLayout();
                 break;
             case R.id.btn_drawer_type_confirm:
                 Toast.makeText(this, "类别-确定", Toast.LENGTH_SHORT).show();
