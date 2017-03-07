@@ -138,6 +138,7 @@ public class HomeFragment extends BaseFragment {
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
                     Toast.makeText(mContext, "解析结果:" + result, Toast.LENGTH_LONG).show();
+
                     String[] mresult=result.split(",");
 
 

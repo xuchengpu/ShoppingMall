@@ -4,12 +4,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
 import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
+import com.xuchengpu.shoppingmall.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +27,9 @@ public class QRCodeActivity extends AppCompatActivity {
     @BindView(R.id.qrcode_image)
     ImageView qrcodeImage;
     private GoodsBean goodsBean;
-    private String textContent;
+    private Bitmap logo;
+    private String textContent1;
+    private Bitmap mBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,25 +41,25 @@ public class QRCodeActivity extends AppCompatActivity {
     }
 
     private void creatQRCode() {
+        textContent1 = goodsBean.getFigure() + "," + goodsBean.getName() + "," + goodsBean.getCover_price() + "," + goodsBean.getProduct_id();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                logo = returnBitMap(Constants.BASE_URL_IMAGE + goodsBean.getFigure());
+                Log.e("tag", "log==" + logo.toString());
+                mBitmap = CodeUtils.createImage(textContent1, 400, 400, logo);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        qrcodeImage.setImageBitmap(mBitmap);
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                final Bitmap logo = returnBitMap(textContent);
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Bitmap mBitmap = CodeUtils.createImage("nihao", 400, 400, null);
-//
-//                        qrcodeImage.setImageBitmap(mBitmap);
-//                    }
-//                });
-//            }
-//        });
-        String textContent =goodsBean.getFigure()+","+goodsBean.getName()+","+goodsBean.getCover_price()+","+goodsBean.getProduct_id();
+                    }
+                });
+            }
+        }).start();
 
-        Bitmap mBitmap = CodeUtils.createImage(textContent, 400, 400, null);
-        qrcodeImage.setImageBitmap(mBitmap);
+
+
 
 
     }
