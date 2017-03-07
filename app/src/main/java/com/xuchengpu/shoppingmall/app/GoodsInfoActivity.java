@@ -199,7 +199,13 @@ public class GoodsInfoActivity extends AppCompatActivity {
             case R.id.ll_goods_root:
                 break;
             case R.id.tv_more_share:
-                Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
+
+                Intent toQRIntent=new Intent(this,QRCodeActivity.class);
+                toQRIntent.putExtra(HomeAdapter.GOODSBEAN,goodsBean);
+                startActivity(toQRIntent);
+
+
                 break;
             case R.id.tv_more_search:
                 Toast.makeText(this, "搜索", Toast.LENGTH_SHORT).show();

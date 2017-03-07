@@ -44,4 +44,5 @@ dependencies {
     compile 'com.android.support:design:25.1.0'
     compile 'com.linsea:opendanmaku:1.0.0@aar'
     compile project(':gradationscroll')
+    compile 'cn.yipianfengye.android:zxing-library:2.1'
 }

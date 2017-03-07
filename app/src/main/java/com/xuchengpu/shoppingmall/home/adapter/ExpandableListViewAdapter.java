@@ -86,8 +86,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         holder.textView.setText(father.get(groupPosition));
         holder.textView.setPadding(0, 10, 0, 10);
 
-//设置展开和非展开的状态
-
+        //设置展开和非展开的状态
         if (isExpanded) {
             holder.imageView.setImageResource(R.drawable.filter_list_selected);
         } else {
@@ -131,6 +130,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+
+//点击事件回调过来的参数位置groupPosition、childPosition
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         childP = childPosition;

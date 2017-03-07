@@ -1,5 +1,7 @@
 package com.xuchengpu.shoppingmall.home.fragment;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -8,11 +10,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.xuchengpu.shoppingmall.R;
+import com.xuchengpu.shoppingmall.app.GoodsInfoActivity;
 import com.xuchengpu.shoppingmall.base.BaseFragment;
 import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
+import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
 import com.xuchengpu.shoppingmall.home.bean.HomeBean;
 import com.xuchengpu.shoppingmall.utils.Constants;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -22,6 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
+
+import static com.xuchengpu.shoppingmall.home.adapter.HomeAdapter.GOODSBEAN;
 
 /**
  * Created by 许成谱 on 2017/2/22 15:10.
@@ -43,6 +52,7 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.ib_top)
     ImageButton ibTop;
     private HomeAdapter adapter;
+    public  static final int REQUEST_CODE=1;
 
     /*
         初始化布局
@@ -101,6 +111,8 @@ public class HomeFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_main_scan:
+                Intent intent = new Intent(mContext, CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
             case R.id.tv_search_home:
                 break;
@@ -109,5 +121,42 @@ public class HomeFragment extends BaseFragment {
             case R.id.ib_top:
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+/**
+ * 处理二维码扫描结果
+ */
+        if (requestCode == REQUEST_CODE) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    Toast.makeText(mContext, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                    String[] mresult=result.split(",");
+
+
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setCover_price(mresult[2]);
+                    goodsBean.setFigure(mresult[0]);
+                    goodsBean.setName(mresult[1]);
+                    goodsBean.setProduct_id(mresult[3]);
+
+                    Intent intent=new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODSBEAN,goodsBean);
+                    mContext.startActivity(intent);
+
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(mContext, "解析二维码失败", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        }
+
     }
 }

@@ -204,6 +204,7 @@ public class GoodsListActivity extends AppCompatActivity {
             Constants.FOOD_STORE,
             Constants.SHOUSHI_STORE,
     };
+    //记录点击的次数
     private int click_count;
     private ExpandableListViewAdapter adapter;
 //    private LocalBroadcastManager manager;
@@ -295,7 +296,7 @@ public class GoodsListActivity extends AppCompatActivity {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 if (child.get(groupPosition).isEmpty()) {// isEmpty没有
-                    return true;
+                    return true;//TRUE表示非伸展状态
                 } else {
                     return false;
                 }
@@ -349,6 +350,7 @@ public class GoodsListActivity extends AppCompatActivity {
         recyclerview.setLayoutManager(new GridLayoutManager(this,2));
         recyclerview.addItemDecoration(new SpaceItemDecoration(10));
 
+        //封装到bean对象中，实现跳转到商品详情页面
         adapter.setOnItemClickListener(new GoodListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(GoodListBean.ResultBean.PageDataBean data) {
@@ -375,6 +377,7 @@ public class GoodsListActivity extends AppCompatActivity {
                 Toast.makeText(this, "搜索", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.ib_goods_list_home:
+                //两种做法
 //                Toast.makeText(this, "主页面", Toast.LENGTH_SHORT).show();
 //                Intent intent=new Intent(Constants.GOTOHOME);
 //                manager.sendBroadcast(intent);
@@ -417,6 +420,7 @@ public class GoodsListActivity extends AppCompatActivity {
                 break;
             case R.id.tv_goods_list_select:
 //                Toast.makeText(this, "筛选", Toast.LENGTH_SHORT).show();
+                //置零
                 click_count = 0;
                 ivGoodsListArrow.setBackgroundResource(R.drawable.new_price_sort_normal);
 

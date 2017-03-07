@@ -12,7 +12,20 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- 二维码扫描权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".app.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/atguigu_logo"
         android:label="@string/app_name"
@@ -42,7 +55,8 @@
         <!-- alipay sdk end -->
         <activity android:name=".app.CallCenterActivity" />
         <activity android:name=".user.view.LoginActivity" />
-        <activity android:name=".home.activity.GoodsListActivity"></activity>
+        <activity android:name=".home.activity.GoodsListActivity" />
+        <activity android:name=".app.QRCodeActivity"></activity>
     </application>
 
 </manifest>

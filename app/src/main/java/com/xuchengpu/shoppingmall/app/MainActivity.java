@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> fragments;
     private Fragment tempFragment;
     private LocalBroadcastManager localBroadcastManager;
-    private BroadcastReceiver receiver=new BroadcastReceiver() {
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -47,15 +47,15 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         //注册广播
-        localBroadcastManager=LocalBroadcastManager.getInstance(this);
-        localBroadcastManager.registerReceiver(receiver,new IntentFilter(Constants.GOTOHOME));
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.registerReceiver(receiver, new IntentFilter(Constants.GOTOHOME));
         //初始化数据，获得碎片集合
         initData();
         //设置监听
@@ -138,10 +138,15 @@ public class MainActivity extends AppCompatActivity {
         localBroadcastManager.unregisterReceiver(receiver);
     }
 
+
+    /*
+    * 当其他页面跳转过来的时候，会回调这个方法得到intent数据，实现跳转到其他页面
+    * */
+
     @Override
     protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
-        int  gotocart = intent.getIntExtra("gotocart",R.id.rb_main_home);
+        super.onNewIntent(intent);
+        int gotocart = intent.getIntExtra("gotocart", R.id.rb_main_home);
         rgMain.check(gotocart);
     }
 

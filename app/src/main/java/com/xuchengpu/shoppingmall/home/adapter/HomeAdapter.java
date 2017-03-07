@@ -185,6 +185,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    Toast.makeText(mContext, "position=" + position, Toast.LENGTH_SHORT).show();
                     HomeBean.ResultBean.HotInfoBean hot_infoBean = hot_info.get(position);
+
                     GoodsBean goodsBean = new GoodsBean();
                     goodsBean.setCover_price(hot_infoBean.getCover_price());
                     goodsBean.setFigure(hot_infoBean.getFigure());

@@ -1,1 +1,1 @@
-include ':app', ':app2', ':fragmentdemo', ':AddSubView', ':alipay_demo', ':gradationscroll', 'teacher'
+include ':app', ':app2', ':fragmentdemo', ':AddSubView', ':alipay_demo', ':gradationscroll', 'teacher', 'zxingLibrary'
