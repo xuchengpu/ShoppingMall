@@ -74,12 +74,13 @@
             android:textColor="#4e4444"
             android:textSize="15sp" />
 
-        <ImageView
+        <CheckBox
+            android:clickable="false"
             android:id="@+id/iv_price_no_limit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/filter_type_selected" />
+             />
     </RelativeLayout>
 
     <View
@@ -102,12 +103,13 @@
             android:textColor="#4e4444"
             android:textSize="15sp" />
 
-        <ImageView
+        <CheckBox
+            android:clickable="false"
             android:id="@+id/iv_price_0_15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/filter_type_selected" />
+             />
     </RelativeLayout>
 
     <View
@@ -130,12 +132,13 @@
             android:textColor="#4e4444"
             android:textSize="15sp" />
 
-        <ImageView
+        <CheckBox
+            android:clickable="false"
             android:id="@+id/iv_price_15_30"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/filter_type_selected" />
+             />
     </RelativeLayout>
 
     <View
@@ -159,13 +162,13 @@
             android:textColor="#4e4444"
             android:textSize="15sp" />
 
-        <ImageView
+        <CheckBox
+            android:clickable="false"
             android:id="@+id/iv_price_30_50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/filter_type_selected"
-            android:clickable="true" />
+            />
     </RelativeLayout>
 
     <View
@@ -188,12 +191,13 @@
             android:textColor="#4e4444"
             android:textSize="15sp" />
 
-        <ImageView
+        <CheckBox
+            android:clickable="false"
             android:id="@+id/iv_price_50_70"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/filter_type_selected" />
+             />
     </RelativeLayout>
 
     <View
@@ -216,12 +220,13 @@
             android:textColor="#4e4444"
             android:textSize="15sp" />
 
-        <ImageView
+        <CheckBox
+            android:clickable="false"
             android:id="@+id/iv_price_70_100"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/filter_type_selected" />
+            />
     </RelativeLayout>
 
     <View
@@ -244,12 +249,13 @@
             android:textColor="#4e4444"
             android:textSize="15sp" />
 
-        <ImageView
+        <CheckBox
+            android:clickable="false"
             android:id="@+id/iv_price_100"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/filter_type_selected" />
+             />
     </RelativeLayout>
 
     <View
@@ -258,6 +264,7 @@
         android:background="#eeee" />
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rl_select_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

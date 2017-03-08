@@ -17,6 +17,7 @@ import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.app.GoodsInfoActivity;
+import com.xuchengpu.shoppingmall.app.SearchActivity;
 import com.xuchengpu.shoppingmall.base.BaseFragment;
 import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
 import com.xuchengpu.shoppingmall.home.bean.GoodsBean;
@@ -115,6 +116,8 @@ public class HomeFragment extends BaseFragment {
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
             case R.id.tv_search_home:
+                Intent intentsearch=new Intent(mContext, SearchActivity.class);
+                startActivity(intentsearch);
                 break;
             case R.id.tv_message_home:
                 break;
@@ -138,7 +141,6 @@ public class HomeFragment extends BaseFragment {
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
                     Toast.makeText(mContext, "解析结果:" + result, Toast.LENGTH_LONG).show();
-
                     String[] mresult=result.split(",");
 
 

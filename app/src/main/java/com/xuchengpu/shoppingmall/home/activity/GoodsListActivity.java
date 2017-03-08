@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.xuchengpu.shoppingmall.R;
 import com.xuchengpu.shoppingmall.app.GoodsInfoActivity;
+import com.xuchengpu.shoppingmall.app.SearchActivity;
 import com.xuchengpu.shoppingmall.home.adapter.ExpandableListViewAdapter;
 import com.xuchengpu.shoppingmall.home.adapter.GoodListAdapter;
 import com.xuchengpu.shoppingmall.home.adapter.HomeAdapter;
@@ -36,7 +38,9 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,31 +99,31 @@ public class GoodsListActivity extends AppCompatActivity {
     @BindView(R.id.btn_drawer_layout_confirm)
     Button btnDrawerLayoutConfirm;
     @BindView(R.id.iv_price_no_limit)
-    ImageView ivPriceNoLimit;
+    CheckBox ivPriceNoLimit;
     @BindView(R.id.rl_price_nolimit)
     RelativeLayout rlPriceNolimit;
     @BindView(R.id.iv_price_0_15)
-    ImageView ivPrice015;
+    CheckBox ivPrice015;
     @BindView(R.id.rl_price_0_15)
     RelativeLayout rlPrice015;
     @BindView(R.id.iv_price_15_30)
-    ImageView ivPrice1530;
+    CheckBox ivPrice1530;
     @BindView(R.id.rl_price_15_30)
     RelativeLayout rlPrice1530;
     @BindView(R.id.iv_price_30_50)
-    ImageView ivPrice3050;
+    CheckBox ivPrice3050;
     @BindView(R.id.rl_price_30_50)
     RelativeLayout rlPrice3050;
     @BindView(R.id.iv_price_50_70)
-    ImageView ivPrice5070;
+    CheckBox ivPrice5070;
     @BindView(R.id.rl_price_50_70)
     RelativeLayout rlPrice5070;
     @BindView(R.id.iv_price_70_100)
-    ImageView ivPrice70100;
+    CheckBox ivPrice70100;
     @BindView(R.id.rl_price_70_100)
     RelativeLayout rlPrice70100;
     @BindView(R.id.iv_price_100)
-    ImageView ivPrice100;
+    CheckBox ivPrice100;
     @BindView(R.id.rl_price_100)
     RelativeLayout rlPrice100;
     @BindView(R.id.et_price_start)
@@ -208,6 +212,11 @@ public class GoodsListActivity extends AppCompatActivity {
     private int click_count;
     private ExpandableListViewAdapter adapter;
 //    private LocalBroadcastManager manager;
+    //价格的CheckBox实例集合
+    private Map<CheckBox,String>  priceCheckBoxes;
+    private List<CheckBox> priceList;
+    private CheckBox priceChecked;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,9 +230,32 @@ public class GoodsListActivity extends AppCompatActivity {
         int position = getIntent().getIntExtra("position", 0);
         //请求网络
         getDataFormNet(urls[position]);
+        initData();
         initView();
 
     }
+
+    private void initData() {
+        priceCheckBoxes = new HashMap<>();
+        priceCheckBoxes.put(ivPriceNoLimit,"NoLimit");
+        priceCheckBoxes.put(ivPrice015,"0-15");
+        priceCheckBoxes.put(ivPrice1530,"15-30");
+        priceCheckBoxes.put(ivPrice3050,"30-50");
+        priceCheckBoxes.put(ivPrice5070,"50-70");
+        priceCheckBoxes.put(ivPrice70100,"70-100");
+        priceCheckBoxes.put(ivPrice100,"100");
+
+        priceList=new ArrayList<>();
+        priceList.add(ivPriceNoLimit);
+        priceList.add(ivPrice015);
+        priceList.add(ivPrice1530);
+        priceList.add(ivPrice3050);
+        priceList.add(ivPrice5070);
+        priceList.add(ivPrice70100);
+        priceList.add(ivPrice100);
+
+    }
+
     private void initView() {
         //设置综合排序高亮显示
         tvGoodsListSort.setTextColor(Color.parseColor("#ed4141"));
@@ -244,11 +276,14 @@ public class GoodsListActivity extends AppCompatActivity {
         llThemeRoot.setVisibility(View.GONE);
         llTypeRoot.setVisibility(View.GONE);
     }
+
     //价格页面
     private void showPriceLayout() {
         llSelectRoot.setVisibility(View.GONE);
         llThemeRoot.setVisibility(View.GONE);
         llTypeRoot.setVisibility(View.GONE);
+
+
     }
 
     //主题页面
@@ -269,15 +304,15 @@ public class GoodsListActivity extends AppCompatActivity {
     }
 
     private void initExpandableListView() {
-        father=new ArrayList();
-        child=new ArrayList();
+        father = new ArrayList();
+        child = new ArrayList();
         //添加数据
         addInfo("全部", new String[]{});
         addInfo("上衣", new String[]{"古风", "和风", "lolita", "日常"});
         addInfo("下装", new String[]{"日常", "泳衣", "汉风", "lolita", "创意T恤"});
         addInfo("外套", new String[]{"汉风", "古风", "lolita", "胖次", "南瓜裤", "日常"});
 
-        adapter = new ExpandableListViewAdapter(this,father,child);
+        adapter = new ExpandableListViewAdapter(this, father, child);
 
         expandableListView.setAdapter(adapter);
 
@@ -286,7 +321,7 @@ public class GoodsListActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 //把位置传入适配器中
-                adapter.isChildSelectable(groupPosition,childPosition);
+                adapter.isChildSelectable(groupPosition, childPosition);
                 adapter.notifyDataSetChanged();
                 return true;
             }
@@ -307,9 +342,9 @@ public class GoodsListActivity extends AppCompatActivity {
 
     private void addInfo(String group, String[] strings) {
         father.add(group);
-        List<String> datas=new ArrayList();
-        for(int i = 0; i < strings.length; i++) {
-          datas.add(strings[i]);
+        List<String> datas = new ArrayList();
+        for (int i = 0; i < strings.length; i++) {
+            datas.add(strings[i]);
         }
         child.add(datas);
     }
@@ -327,7 +362,7 @@ public class GoodsListActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("tag", "联网请求成功==" );
+                        Log.e("tag", "联网请求成功==");
                         processData(response);
                     }
                 });
@@ -347,7 +382,7 @@ public class GoodsListActivity extends AppCompatActivity {
         GoodListAdapter adapter = new GoodListAdapter(this, page_data);
         recyclerview.setAdapter(adapter);
 
-        recyclerview.setLayoutManager(new GridLayoutManager(this,2));
+        recyclerview.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerview.addItemDecoration(new SpaceItemDecoration(10));
 
         //封装到bean对象中，实现跳转到商品详情页面
@@ -367,7 +402,7 @@ public class GoodsListActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.ib_goods_list_back, R.id.tv_goods_list_search, R.id.ib_goods_list_home, R.id.tv_goods_list_sort, R.id.tv_goods_list_price, R.id.tv_goods_list_select,R.id.ib_drawer_layout_back, R.id.ib_drawer_layout_confirm, R.id.rl_select_price, R.id.rl_select_recommend_theme, R.id.rl_select_type, R.id.btn_drawer_layout_cancel, R.id.btn_drawer_layout_confirm, R.id.btn_drawer_theme_cancel, R.id.btn_drawer_theme_confirm, R.id.btn_drawer_type_cancel, R.id.btn_drawer_type_confirm})
+    @OnClick({R.id.rl_price_nolimit, R.id.rl_price_0_15, R.id.rl_price_15_30, R.id.rl_price_30_50, R.id.rl_price_50_70, R.id.rl_price_70_100, R.id.rl_price_100,R.id.ib_goods_list_back, R.id.tv_goods_list_search, R.id.ib_goods_list_home, R.id.tv_goods_list_sort, R.id.tv_goods_list_price, R.id.tv_goods_list_select, R.id.ib_drawer_layout_back, R.id.ib_drawer_layout_confirm, R.id.rl_select_price, R.id.rl_select_recommend_theme, R.id.rl_select_type, R.id.btn_drawer_layout_cancel, R.id.btn_drawer_layout_confirm, R.id.btn_drawer_theme_cancel, R.id.btn_drawer_theme_confirm, R.id.btn_drawer_type_cancel, R.id.btn_drawer_type_confirm})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_goods_list_back:
@@ -375,6 +410,8 @@ public class GoodsListActivity extends AppCompatActivity {
                 break;
             case R.id.tv_goods_list_search:
                 Toast.makeText(this, "搜索", Toast.LENGTH_SHORT).show();
+                Intent intentsearch = new Intent(this, SearchActivity.class);
+                startActivity(intentsearch);
                 break;
             case R.id.ib_goods_list_home:
                 //两种做法
@@ -441,7 +478,16 @@ public class GoodsListActivity extends AppCompatActivity {
                 dlLeft.closeDrawer(Gravity.RIGHT);
                 break;
             case R.id.ib_drawer_layout_confirm:
-                Toast.makeText(this, "筛选-确定", Toast.LENGTH_SHORT).show();
+                String price=tvDrawerPrice.getText().toString();
+                String theme=tvDrawerRecommend.getText().toString();
+                String type=tvDrawerType.getText().toString();
+                Toast.makeText(this, "筛选了price="+price+"，主题="+theme+" ,类别="+type, Toast.LENGTH_SHORT).show();
+                if(!price.equals("NoLimit")||!theme.equals("全部")||!type.equals("全部")) {
+                    getDataFormNet(urls[2]);
+                }else{
+                    getDataFormNet(urls[0]);
+                }
+                dlLeft.closeDrawer(Gravity.RIGHT);
                 break;
             case R.id.rl_select_price://显示-价格
                 llPriceRoot.setVisibility(View.VISIBLE);
@@ -461,6 +507,13 @@ public class GoodsListActivity extends AppCompatActivity {
                 break;
             case R.id.btn_drawer_layout_confirm:
                 Toast.makeText(this, "价格-确定", Toast.LENGTH_SHORT).show();
+                for(int i = 0; i < priceList.size(); i++) {
+                  if(priceList.get(i).isChecked()) {
+                      tvDrawerPrice.setText(priceCheckBoxes.get(priceList.get(i)));
+                  }
+                }
+                llSelectRoot.setVisibility(View.VISIBLE);
+                showSelectorLayout();
                 break;
             case R.id.btn_drawer_theme_cancel:
                 llSelectRoot.setVisibility(View.VISIBLE);
@@ -476,6 +529,47 @@ public class GoodsListActivity extends AppCompatActivity {
             case R.id.btn_drawer_type_confirm:
                 Toast.makeText(this, "类别-确定", Toast.LENGTH_SHORT).show();
                 break;
+
+
+
+            case R.id.rl_price_nolimit:
+                setALlFalse();
+                ivPriceNoLimit.setChecked(true);
+
+                break;
+            case R.id.rl_price_0_15:
+                setALlFalse();
+                ivPrice015.setChecked(true);
+                break;
+            case R.id.rl_price_15_30:
+                setALlFalse();
+                ivPrice1530.setChecked(true);
+                break;
+            case R.id.rl_price_30_50:
+                setALlFalse();
+                ivPrice3050.setChecked(true);
+                break;
+            case R.id.rl_price_50_70:
+                setALlFalse();
+                ivPrice5070.setChecked(true);
+                break;
+            case R.id.rl_price_70_100:
+                setALlFalse();
+                ivPrice70100.setChecked(true);
+                break;
+            case R.id.rl_price_100:
+                setALlFalse();
+                ivPrice100.setChecked(true);
+                break;
         }
     }
+
+    private void setALlFalse() {
+        for(int i = 0; i < priceList.size(); i++) {
+          priceList.get(i).setChecked(false);
+
+        }
+    }
+
+
 }
